@@ -8,7 +8,7 @@ class WeatherApp extends Component {
   }
 
   componentDidMount() {
-    fetch('http://api.openweathermap.org/data/2.5/weather?q=London&units=Metric&APIkey=YOUR_API_KEY')
+    fetch('api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=0ef30515c0d3c9a66e28ece263499916')
     .then(response => response.json()) 
     .then(responseData => {
       this.setState({ 
@@ -21,8 +21,7 @@ class WeatherApp extends Component {
   }
   
   render() {
-    const imgSrc = 'http://openweathermap.org/img/w/' + 
-    this.state.icon + '.png';
+    const imgSrc = 'http://openweathermap.org/img/w/' + this.state.icon + '.png';
 
     if (this.state.loading) {
       return <p>Loading</p>;

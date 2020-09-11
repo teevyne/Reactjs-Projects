@@ -1,68 +1,56 @@
-// import React, { useState } from 'react';
-// import './App.css';
-
-// function App() {
-//   const [data, setData] = useState([]);
-//   const [keyword, setKeyword] = useState('');
-
-//   const fetchData = () => {
-//     const url = `https://api.github.com/search/repositories?q=${keyword}`;
-//     fetch(url)
-//     .then(response => response.json()) 
-//     .then(responseData => {
-//       setData(responseData.items); 
-//     }); 
-//   }
-  
-//   const handleChange = (e) => {
-//     setKeyword(e.target.value);
-//   }  
-
-//   const tableRows = data.map((item, index) => 
-//     <tr key={index}><td>{item.full_name}</td>
-//     <td><a href={item.html_url}>{item.html_url}</a></td></tr>); 
-
-//   return (
-//     <div className="App">
-//       <input type="text" onChange={handleChange} />
-//       <button onClick={fetchData} value={keyword} >fetch</button>
-//       <table><tbody>{tableRows}</tbody></table>
-//     </div>
-//   );
-// }
-
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-class App extends Component {
-  constructor(props) {
-  super(props);
-  this.state = { keyword: '', data: [] };
+// import ReactTable from "react-table";
+// import 'react-table/react-table.css';
+import ReactTable from "react-table-6";  
+import "react-table-6/react-table.css" 
+
+function App() {
+  const [data, setData] = useState([]);
+  const [keyword, setKeyword] = useState('');
+
+  const fetchData = () => {
+    const url = `https://api.github.com/search/repositories?q=${keyword}`;
+    fetch(url)
+    .then(response => response.json()) 
+    .then(responseData => {
+      setData(responseData.items); 
+    }); 
   }
-    fetchData = () => {
-    const url = `https://api.github.com/search/repositories?
-    q=${this.state.keyword}`;
-      fetch(url)
-      .then(response => response.json())
-      .then(responseData => {
-      this.setState({data : responseData.items });
-      });
-      }
-      handleChange = (e) => {
-      this.setState({keyword: e.target.value});
-      }
-      render() {
-      const tableRows = this.state.data.map((item, index) =>
-      <tr key={index}><td>{item.full_name}</td>
-      <td><a href={item.html_url}>{item.html_url}</a></td></tr>);
-      return (
-      <div className="App">
-      <input type="text" onChange={this.handleChange} />
-      <button onClick={this.fetchData}
-      value={this.state.keyword} >Fetch</button>
-      <table><tbody>{tableRows}</tbody></table>
-      </div>
-    );
+  
+  const handleChange = (e) => {
+    setKeyword(e.target.value);
+  }  
+
+  const btnClick = (value) => {
+    alert(value);
   }
+
+  const columns = [{
+    Header: 'Name', // Header of the column
+    accessor: 'full_name' // Value accessor
+  }, {
+    Header: 'URL',
+    accessor: 'html_url',
+  }, {
+    Header: 'Owner',
+    accessor: 'owner.login',
+  }, {
+    id: 'button',
+    sortable: false,
+    filterable: false,
+    width: 100,
+    accessor: 'full_name',
+    Cell: ({value}) => (<button onClick={() => {btnClick(value)}}>Press me</button>)
+}]
+
+  return (
+    <div className="App">
+      <input type="text" onChange={handleChange} />
+      <button onClick={fetchData} value={keyword} >fetch</button>
+      <ReactTable data={data} columns={columns} filterable={true} defaultPageSize = {10} />
+    </div>
+  );
 }
 
 export default App;
